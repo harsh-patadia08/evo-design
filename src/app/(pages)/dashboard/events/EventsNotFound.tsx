@@ -1,5 +1,5 @@
 import React, { DOMAttributes } from "react";
-import Button from "../../components/Button";
+import Button from "@/app/components/Button";
 import { PlusIcon } from "lucide-react";
 import Image from "next/image";
 

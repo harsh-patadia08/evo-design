@@ -1,15 +1,15 @@
+"use client";
 import { LucideSearch, User } from "lucide-react";
 import React, { useCallback, useState } from "react";
 
-export default function Header({search, setSearch}: {search: string, setSearch: React.Dispatch<React.SetStateAction<string>>}): React.ReactElement {
-
-  // function to debounce the search on change 
-  const [searchInput, setSearchInput] = useState<string>(search);
+export default function Header(): React.ReactElement {
+  // function to debounce the search on change
+  const [searchInput, setSearchInput] = useState<string>("");
   const [debounceTimer, setDebounceTimer] = useState<number | null>(null);
 
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.trim() === "") {
-      setSearch(""); setSearchInput("");
+      setSearchInput("");
       return;
     }
     setSearchInput(e.target.value);
@@ -17,7 +17,7 @@ export default function Header({search, setSearch}: {search: string, setSearch: 
       clearTimeout(debounceTimer);
     }
     const timeoutId = setTimeout(function (): void {
-      setSearch(e.target.value);
+      setSearchInput(e.target.value);
     }, 500);
     setDebounceTimer(parseInt(timeoutId.toString()));
   };
