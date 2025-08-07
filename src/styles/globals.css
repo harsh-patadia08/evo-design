@@ -1,12 +1,13 @@
 @import "tailwindcss";
 /* @import "tw-animate-css"; */
+@import "./custom.css";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
   --font-Inter: "Inter", sans-serif;
   --radius: 0.625rem;
-  --background: rgba(255, 241, 234, 1);
+  --background: #fff1ea;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -125,6 +126,18 @@ input[type="checkbox"]:checked::after {
   width: 16px;
   height: 16px;
 }
+
+@layer utilities {
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+     /* Hide scrollbar for IE, Edge and Firefox */
+      .no-scrollbar {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+    }
+  }
 
 .dark {
   --background: oklch(0.145 0 0);

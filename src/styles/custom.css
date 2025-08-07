@@ -1,0 +1,15 @@
+.flex-center {
+    @apply flex items-center justify-center;
+}
+
+.sm-flex-center {
+    @apply sm:flex sm:items-center sm:justify-center;
+}
+
+.md-flex-center {
+    @apply md:flex md:items-center md:justify-center;
+}
+
+.lg-flex-center {
+    @apply lg:flex lg:items-center lg:justify-center;
+}

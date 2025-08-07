@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/styles/globals.css";
+import { SearchProvider } from "@/context/SearchContext";
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
@@ -25,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+        <SearchProvider>
+          {children}
+        </SearchProvider>
       </body>
     </html>
   );

@@ -25,7 +25,7 @@ export default function AdminDashboardLayout({
     <html lang="en">
       <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <div className="h-screen w-full flex sm:p-2 selection:bg-[#FFB48C] selection:text-amber-50">
-          <main className="mx-auto sm:w-[1200px] p-2">
+          <main className="mx-auto w-full sm:w-[1200px] p-2">
             <Header />
             {children}
           </main>

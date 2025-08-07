@@ -1,20 +1,9 @@
-import React, { DOMAttributes } from "react";
+import React from "react";
 import Button from "@/app/components/Button";
 import { PlusIcon } from "lucide-react";
 import Image from "next/image";
 
 export default function EventsNotFound() {
-    
-  const ButtonEvents: DOMAttributes<HTMLButtonElement> = {
-    onClick: (event) => {
-        event.preventDefault();
-      console.log("the event triggered is:", event.type);
-    },
-    onChange:()=>{
-        console.log();
-        
-    }
-  };
 
   return (
     <>
@@ -39,7 +28,6 @@ export default function EventsNotFound() {
               </span>
             }
             type="button"
-            events={ButtonEvents}
           />
         </div>
       </section>
