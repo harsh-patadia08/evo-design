@@ -1,7 +1,7 @@
 import Link from "next/link";
-import EventPage from "./events/page";
+import React from "react";
 
-export default function Dashboard() {
+export default function Dashboard():React.ReactElement {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4 mt-8"> Dashboard</h1>

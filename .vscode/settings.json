@@ -1,0 +1,10 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.addMissingImports.ts": "always",
+        "source.fixAll.ts": "always",
+        "source.sortImports": "always",
+        "source.removeUnused.ts": "always",
+        "source.removeUnusedImports": "always",
+        "source.sort.json": "always",
+    }
+}

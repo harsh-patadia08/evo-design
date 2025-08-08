@@ -1,12 +1,10 @@
-import React, { use, useContext, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import Button from "@/app/components/Button";
 import {
   LucideLayoutGrid,
   LucideStretchHorizontal,
   LucideListFilter,
-  PlusIcon,
-  LucideArrowLeft,
-  LucideArrowRight,
+  PlusIcon
 } from "lucide-react";
 import EventsGridView from "./layouts/EventsGridView";
 import EventsListView from "./layouts/EventsListView";
@@ -17,36 +15,54 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Pagination from "./layouts/Pagination";
 import PaginationSkeleton from "./skeletons/PaginationSkeleton";
 import SearchNotFound from "./layouts/SearchNotFound";
-import { SearchContext } from "@/context/SearchContext";
+import { Events } from "@/interfaces/events";
+import AddEvent from "./dialogs/AddEvent";
 
 export default function EventList(): React.ReactElement {
   // State to manage the view type (card or list)
   const [cardListView, setCardListView] = useState(false);
-  const [eventList, setEventList] = useState(events);
+  const [eventList, setEventList] = useState<Events[]>(events);
+  const [paginatedEvents, setPaginatedEvents] = useState<Events[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPagesArray, setTotalPagesArray] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // event CRUD operations states
+  const [eventData, setEventData] = useState<Events>({} as Events);
 
   // other necessary imports and state utilities
   const searchParams = useSearchParams();
   const router = useRouter();
   const layout = searchParams.get("layout");
+  const searchQuery = searchParams.get("query")?.toString().trim() || "";
 
-  //get the search query from the context provider
-  const { searchQuery } = useContext(SearchContext);
+  // Reference to the dialog component
+  const addEventRef = React.useRef<HTMLButtonElement>(null);
 
+  // function to set the initial pagination of events and show 6 events per page
+  function initialPagination(event: Events[] = eventList): void {
+     setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      const startIndex = (currentPage - 1) * 6;
+      const endIndex = startIndex + 6;
+      setPaginatedEvents(event.slice(startIndex, endIndex));
+    }, 500);
+  }
+  // useEffect to set the initial view based on the layout query parameter
   useEffect(():void => {
     // Filter events based on the search query
     setIsLoading(true);
-      if (searchQuery.trim() !== "") {
+      if (searchQuery === "") {
+        setEventList(events);
+      } else {
         const filteredEvents = events.filter((event) => event.event_name.toLowerCase().includes(searchQuery.toLowerCase()) );
         setEventList(filteredEvents);
-      } else {
-        setEventList(events);
       }
+      initialPagination();
       setTimeout(() => {
         setIsLoading(false);
-      }, 1000);
+      }, 500);
     }, [searchQuery]);
 
   useEffect(() => {
@@ -71,29 +87,23 @@ export default function EventList(): React.ReactElement {
   };
   // useEffect to set the eventList based on the current page and show 6 events per page
   useEffect((): void => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      const startIndex = (currentPage - 1) * 6;
-      const endIndex = startIndex + 6;
-      setEventList(events.slice(startIndex, endIndex));
-    }, 1000);
+   initialPagination();
   }, [currentPage]);
 
   //useEffect to make total pages array when there is change in events and set the current page to 1
   useEffect((): void => {
     setIsLoading(true);
+    const totalPages = Math.ceil(eventList.length / 6);
+    setTotalPagesArray(Array.from({ length: totalPages }, (_, index) => index + 1));
+    setCurrentPage(1);
+    initialPagination();
+
     setTimeout(() => {
       setIsLoading(false);
-      const totalPages = Math.ceil(events.length / 6);
-      setTotalPagesArray(
-        Array.from({ length: totalPages }, (_, index) => index + 1)
-      );
-      setCurrentPage(1);
     }, 1000);
-  }, [events]);
+  }, [eventList]);
 
-  if (eventList.length === 0) {
+  if (eventList.length === 0 && !isLoading) {
     return <SearchNotFound />;
   }
   return (
@@ -144,6 +154,9 @@ export default function EventList(): React.ReactElement {
                 <PlusIcon size={14} /> Add New Event
               </span>
             }
+            events={{
+              onClick: () => addEventRef.current?.click()
+            }}
             type="button"
           />
         </div>
@@ -194,8 +207,7 @@ export default function EventList(): React.ReactElement {
             type="button"
           />
         </div>
-      </section>
-
+      </section>     
       {/* Events list section */}
       <section className=" mt-6 min-h-[80vh]">
         {cardListView ? (
@@ -203,14 +215,14 @@ export default function EventList(): React.ReactElement {
             <EventsListViewSkeleton />
           ) : (
             <EventsListView
-              events={eventList}
+              events={paginatedEvents}
               event_category={event_category}
             />
           )
         ) : isLoading ? (
           <EventsGridViewSkeleton />
         ) : (
-          <EventsGridView events={eventList} event_category={event_category} />
+          <EventsGridView events={paginatedEvents} event_category={event_category} />
         )}
         {/* Pagination section */}
         {isLoading ? (
@@ -225,6 +237,7 @@ export default function EventList(): React.ReactElement {
           />
         )}
       </section>
+      <AddEvent addEventRef={addEventRef} eventCategories={event_category} eventData={eventData} setEventData={setEventData} />
     </React.Fragment>
   );
 }

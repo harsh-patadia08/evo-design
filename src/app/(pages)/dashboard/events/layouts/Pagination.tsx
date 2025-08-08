@@ -1,6 +1,6 @@
 import Button from '@/app/components/Button';
 import { LucideArrowLeft, LucideArrowRight } from 'lucide-react';
-import React from 'react'
+import React from 'react';
 
 
 interface PaginationProps {
@@ -17,7 +17,7 @@ export default function Pagination({
      setCurrentPage,
      currentPage,
     }: PaginationProps):React.ReactElement {
-      let classes = `flex justify-between items-center  ${cardListView? "rounded-b-lg bg-white p-4 border-t border-[#EAEAEA]": 'my-4'}`;
+      const classes = `flex justify-between items-center  ${cardListView? "rounded-b-lg bg-white p-4 border-t border-[#EAEAEA]": 'my-4'}`;
       return (
         <div className={classes}>
           <Button

@@ -1,34 +1,33 @@
 "use client";
-import { SearchContext } from "@/context/SearchContext";
 import { LucideArrowLeft, LucideSearch, LucideX, User } from "lucide-react";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import React, {useEffect, useState } from "react";
 
 export default function Header(): React.ReactElement {
   // function to debounce the search on change
   const [searchInput, setSearchInput] = useState<string>("");
-  const [debounceTimer, setDebounceTimer] = useState<number | null>(null);
   const [searchActive, setSearchActive] = useState<boolean>(false);
+
+  // states to manage the search params
+  const searchParams = useSearchParams();
+  const { replace } = useRouter();
+  const pathName = usePathname();
+  const params = new URLSearchParams(searchParams);
 
   // Function to handle search input change with debounce
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.trim() === "") {
-      setSearchInput("");
-      return;
-    }
-    setSearchInput(e.target.value);
-    if (debounceTimer) {
-      clearTimeout(debounceTimer);
-    }
-    const timeoutId = setTimeout(function (): void {
-      setSearchInput(e.target.value);
-    }, 500);
-    setDebounceTimer(parseInt(timeoutId.toString()));
+    const inputValue = e.target.value.trim();
+    setSearchInput(inputValue);
   };
 
-  //use Effect to update the context search query
-  const { setSearchQuery, searchQuery } = useContext(SearchContext);
   useEffect(() => {
-    setSearchQuery(searchInput);
+    if (searchInput === "") {
+      params.delete('query');
+      setSearchInput("");
+    } else {
+      params.set('query', searchInput);
+    }
+    replace(`${pathName}?${params.toString()}`);
   }, [searchInput]);
 
   function SarchField(): React.ReactElement {
@@ -40,13 +39,13 @@ export default function Header(): React.ReactElement {
           </span>
           {/* show this input only on large screen */}
           <input
-            className="flex text-[#06060680] py-2.5 focus:outline-0"
-            value={searchQuery}
+            className="flex text-[#06060680] py-2.5 focus:outline-0 sm:hidden"
             onChange={handleSearch}
+            value={searchInput}
             type="text"
           />
           {/* show this icon only on small screen */}
-          <span onClick={() => setSearchActive(false)}>
+          <span className="cursor-pointer" onClick={() => setSearchInput("")}>
             <LucideX size={16} color="black" className="text-black"
             />
           </span>
@@ -76,9 +75,9 @@ export default function Header(): React.ReactElement {
               <div className="relative">
                 {/* show this input only on large screen */}
                 <input
-                  className="hidden sm:flex text-[#06060680] rounded-[12px] border-[#EAEAEA] border-2 pl-12 py-2.5 sm:w-[320px] sm:h-[40px] placeholder:text-[16px]:font-[400] placeholder:text-[#06060680] focus:outline-1 focus:outline-[#FFB48C] focus:border-[#FFB48C]"
-                  value={searchInput}
+                  className="hidden sm:flex text-[#06060680] rounded-[12px] border-[#EAEAEA] border-2 pl-12 py-2.5 sm:w-[320px] sm:h-[40px] placeholder:text-[16px]:font-[400] placeholder:text-[#06060680] focus:outline-1 focus:outline-[#FFB48C] focus:border-[#FFB48C] caret-[#FD5900]"
                   onChange={handleSearch}
+                  value={searchInput}
                   placeholder="Search here...."
                   type="text"
                 />

@@ -4,7 +4,8 @@ import { LucideSquarePen, LucideTrash2 } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react'
 
-export default function EventsGridView( { events, event_category }: { events: Events[]; event_category: EventCategory[]; }): React.ReactElement {
+interface EventsGridViewProps { events: Events[]; event_category: EventCategory[]; }
+export default function EventsGridView( { events, event_category }: EventsGridViewProps ): React.ReactElement {
 
     // Function to find the category name based on the category ID
     function findCategory(category_id: number): EventCategory | undefined {

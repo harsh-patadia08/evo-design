@@ -1,7 +1,8 @@
 "use client";
+import React from "react";
 import LoginForm from "./LoginForm";
 
-export default function LoginPage() {
+export default function LoginPage(): React.ReactElement {
   return (
     <div className="h-screen w-full flex items-center justify-center p-8 pb-20 gap-16 sm:p-20 selection:bg-[#FFB48C] selection:text-amber-50">
       <main className="mx-auto max-w-[500px] p-8">

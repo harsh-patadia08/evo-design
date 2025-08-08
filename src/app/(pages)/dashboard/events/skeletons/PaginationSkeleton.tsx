@@ -1,10 +1,11 @@
 import Button from "@/app/components/Button";
+import React from "react";
 
 interface PaginationSkeletonProps {
   cardListView: boolean;
 }
 export default function PaginationSkeleton({cardListView}: PaginationSkeletonProps ): React.ReactElement {
-    let classes = `flex justify-between items-center  ${cardListView? "rounded-b-lg bg-white p-4 border-t border-[#EAEAEA]": 'my-4'}`;
+    const classes = `flex justify-between items-center  ${cardListView? "rounded-b-lg bg-white p-4 border-t border-[#EAEAEA]": 'my-4'}`;
     return (
         <div className={classes}>
             <Button title={<span className="w-2 h-2 px-3"></span>} type="button"

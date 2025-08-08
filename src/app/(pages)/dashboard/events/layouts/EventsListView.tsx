@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EventCategory, Events } from "@/interfaces/events";
 import { formatDate } from "@/lib/utils";
 import { LucideSquarePen, LucideTrash2 } from "lucide-react";

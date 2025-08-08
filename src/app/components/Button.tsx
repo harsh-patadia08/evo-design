@@ -1,4 +1,3 @@
-import { LucidePlus } from "lucide-react";
 import React, { DOMAttributes } from "react";
 
 export default function Button({

@@ -1,5 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { LucideSquarePen, LucideTrash2 } from "lucide-react";
+import React from "react";
 
 export default function EventsListViewSkeleton(): React.ReactElement {
   return (
