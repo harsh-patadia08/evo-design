@@ -1,22 +1,22 @@
-import React, {useEffect, useState } from "react";
 import Button from "@/app/components/Button";
+import { event_category, events } from "@/constants";
+import { Events } from "@/interfaces/events";
 import {
   LucideLayoutGrid,
-  LucideStretchHorizontal,
   LucideListFilter,
+  LucideStretchHorizontal,
   PlusIcon
 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import AddEvent from "./dialogs/AddEvent";
 import EventsGridView from "./layouts/EventsGridView";
 import EventsListView from "./layouts/EventsListView";
-import { event_category, events } from "@/constants";
-import EventsListViewSkeleton from "./skeletons/EventsListViewSkeleton";
-import EventsGridViewSkeleton from "./skeletons/EventsGridViewSkeleton";
-import { useRouter, useSearchParams } from "next/navigation";
 import Pagination from "./layouts/Pagination";
-import PaginationSkeleton from "./skeletons/PaginationSkeleton";
 import SearchNotFound from "./layouts/SearchNotFound";
-import { Events } from "@/interfaces/events";
-import AddEvent from "./dialogs/AddEvent";
+import EventsGridViewSkeleton from "./skeletons/EventsGridViewSkeleton";
+import EventsListViewSkeleton from "./skeletons/EventsListViewSkeleton";
+import PaginationSkeleton from "./skeletons/PaginationSkeleton";
 
 export default function EventList(): React.ReactElement {
   // State to manage the view type (card or list)
@@ -27,9 +27,6 @@ export default function EventList(): React.ReactElement {
   const [totalPagesArray, setTotalPagesArray] = useState<number[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // event CRUD operations states
-  const [eventData, setEventData] = useState<Events>({} as Events);
-
   // other necessary imports and state utilities
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -37,7 +34,8 @@ export default function EventList(): React.ReactElement {
   const searchQuery = searchParams.get("query")?.toString().trim() || "";
 
   // Reference to the dialog component
-  const addEventRef = React.useRef<HTMLButtonElement>(null);
+  const eventRef = React.useRef<HTMLButtonElement>(null);
+  const [selectedEvent, setSelectedEvent] = useState<Events | null>({} as Events);
 
   // function to set the initial pagination of events and show 6 events per page
   function initialPagination(event: Events[] = eventList): void {
@@ -103,6 +101,10 @@ export default function EventList(): React.ReactElement {
     }, 1000);
   }, [eventList]);
 
+  function handleEventUpdate(event: Events): void {
+    setSelectedEvent(event);
+    eventRef.current?.click();
+  }
   if (eventList.length === 0 && !isLoading) {
     return <SearchNotFound />;
   }
@@ -121,16 +123,16 @@ export default function EventList(): React.ReactElement {
         <div className="hidden gap-2 h-10 justify-between text-[12px] sm-flex-center sm:shrink-0 lg:text-[16px]">
           <Button
             title={
-              <span className="sm-flex-center text-[#06060680] gap-2.5 py-2 font-semibold">
+              <span className="sm-flex-center gap-2.5 py-2 font-semibold">
                 <LucideListFilter size={16} /> Filter
               </span>
             }
             type="button"
-            className="bg-transparent border-[#06060680] border-[1px] px-3 sm:px-6"
+            className="text-[#06060680] bg-transparent border-[#06060680] border-[1px] px-3 sm:px-6 button-primary-hover"
           />
           <Button
             title={
-              <span className="sm-flex-center text-[#06060680] gap-2.5 py-2 font-semibold">
+              <span className="sm-flex-center gap-2.5 py-2 font-semibold">
                 {cardListView ? (
                   <LucideLayoutGrid size={18} />
                 ) : (
@@ -140,7 +142,7 @@ export default function EventList(): React.ReactElement {
               </span>
             }
             type="button"
-            className="bg-transparent border-[#06060680] border-[1px] px-3 sm:px-6"
+            className="bg-transparent text-[#06060680] border-[#06060680] border-[1px] px-3 sm:px-6 button-primary-hover"
             events={{
               onClick: () => {
                 router.push(`?layout=${cardListView ? "grid" : "list"}`);
@@ -155,7 +157,7 @@ export default function EventList(): React.ReactElement {
               </span>
             }
             events={{
-              onClick: () => addEventRef.current?.click()
+              onClick: () => eventRef.current?.click()
             }}
             type="button"
           />
@@ -215,6 +217,7 @@ export default function EventList(): React.ReactElement {
             <EventsListViewSkeleton />
           ) : (
             <EventsListView
+              handleEventUpdate={handleEventUpdate}
               events={paginatedEvents}
               event_category={event_category}
             />
@@ -222,7 +225,10 @@ export default function EventList(): React.ReactElement {
         ) : isLoading ? (
           <EventsGridViewSkeleton />
         ) : (
-          <EventsGridView events={paginatedEvents} event_category={event_category} />
+          <EventsGridView
+          handleEventUpdate={handleEventUpdate} 
+          events={paginatedEvents} 
+          event_category={event_category} />
         )}
         {/* Pagination section */}
         {isLoading ? (
@@ -237,7 +243,7 @@ export default function EventList(): React.ReactElement {
           />
         )}
       </section>
-      <AddEvent addEventRef={addEventRef} eventCategories={event_category} eventData={eventData} setEventData={setEventData} />
+      <AddEvent eventRef={eventRef} eventCategories={event_category} setEventList={setEventList} selectedEvent={selectedEvent} />
     </React.Fragment>
   );
 }

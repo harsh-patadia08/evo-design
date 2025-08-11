@@ -7,9 +7,10 @@ import React from "react";
 interface  EventsListViewProps {
   events: Events[];
   event_category: EventCategory[];
+  handleEventUpdate: (event: Events) => void
 }
 //This component is used to render the events list view by using the shadcn table component 
-export default function EventsListView({ events, event_category }: EventsListViewProps ): React.ReactElement{
+export default function EventsListView({ events, event_category, handleEventUpdate }: EventsListViewProps ): React.ReactElement{
 
     return (
         <React.Fragment>
@@ -42,7 +43,7 @@ export default function EventsListView({ events, event_category }: EventsListVie
                                 <TableCell className="text-sm">
                                     <div className="flex-center gap-2">
                                         <LucideTrash2 size={20} color="#475467" />
-                                        <LucideSquarePen size={20} color="#475467" />
+                                        <LucideSquarePen onClick={() => handleEventUpdate(event)} size={20} color="#475467" />
                                     </div>
                                 </TableCell>
                             </TableRow>

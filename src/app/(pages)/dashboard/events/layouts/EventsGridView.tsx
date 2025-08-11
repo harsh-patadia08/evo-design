@@ -2,10 +2,14 @@ import { EventCategory, Events } from '@/interfaces/events';
 import { formatDate } from '@/lib/utils';
 import { LucideSquarePen, LucideTrash2 } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react'
+import React from 'react';
 
-interface EventsGridViewProps { events: Events[]; event_category: EventCategory[]; }
-export default function EventsGridView( { events, event_category }: EventsGridViewProps ): React.ReactElement {
+interface EventsGridViewProps { 
+    events: Events[];
+    event_category: EventCategory[];
+    handleEventUpdate: (event: Events) => void;
+}
+export default function EventsGridView( { events, event_category,handleEventUpdate }: EventsGridViewProps ): React.ReactElement {
 
     // Function to find the category name based on the category ID
     function findCategory(category_id: number): EventCategory | undefined {
@@ -20,7 +24,7 @@ export default function EventsGridView( { events, event_category }: EventsGridVi
             <h4 className="text-xl smtext-2xl font-normal">{event.event_name}</h4>
             <div className="flex-center gap-2">
             <LucideTrash2 size={20} color="#06060680" />
-            <LucideSquarePen size={20} color="#06060680" />
+            <LucideSquarePen onClick={() => handleEventUpdate(event)} size={20} color="#06060680" />
             </div>
         </div>
         <div className="mt-2 flex gap-2 items-center">

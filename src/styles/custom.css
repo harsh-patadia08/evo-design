@@ -13,3 +13,26 @@
 .lg-flex-center {
     @apply lg:flex lg:items-center lg:justify-center;
 }
+
+.input-field {
+    @apply text-[#06060680] border-[#06060680] border-[1.5px] bg-white rounded-[8px] placeholder:text-[16px] placeholder:font-normal placeholder:text-[#06060680] focus:outline-1 focus:outline-[#FFB48C] focus:border-[#FFB48C]
+}
+
+.grid-start-1 {
+    @apply grid grid-cols-1 items-start gap-0.5;
+}
+
+.button-primary {
+    @apply bg-gradient-to-r from-[#FD5900] to-[#FFB48C] shadow-[4px_4px_12px_0px_#00000040_inset] hover:shadow-[0_8px_20px_0px_#EA520229] active:shadow-[0_8px_20px_0px_#EA520229]
+}
+
+.button-primary-hover {
+    @apply hover:text-white hover:bg-gradient-to-r from-[#FD5900] to-[#FFB48C] hover:shadow-[4px_4px_12px_0px_#00000040_inset] hover:shadow-[0_8px_20px_0px_#EA520229] active:shadow-[0_8px_20px_0px_#EA520229] hover:border-1 hover:border-transparent
+}
+.button-secondary {
+    @apply font-medium text-lg text-[#06060680] bg-[#EAEAEA] rounded-sm hover:bg-gradient-to-r from-[#FD5900] to-[#FFB48C] hover:text-white
+}
+
+.dashed-border-2 {
+    @apply border-dashed border-[#06060680] border-[2px]
+}
